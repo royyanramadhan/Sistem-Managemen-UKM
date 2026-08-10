@@ -7,7 +7,6 @@ nixPkgs = [
     "php84Extensions.tokenizer",
     "php84Extensions.xml",
     "php84Extensions.ctype",
-    "php84Extensions.json",
     "php84Extensions.bcmath",
     "php84Extensions.fileinfo",
     "php84Extensions.zip",
