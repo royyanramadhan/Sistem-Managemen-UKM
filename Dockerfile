@@ -4,9 +4,10 @@ FROM php:8.4-cli
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libzip-dev libpng-dev \
     libonig-dev libxml2-dev libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring \
-       tokenizer xml ctype bcmath fileinfo zip gd opcache \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install hanya extension yang BELUM ada
+RUN docker-php-ext-install pdo pdo_mysql zip gd bcmath
 
 # Install Node.js 22
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
@@ -18,13 +19,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . .
 
-# Install dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 RUN npm install && npm run build
-
-# Laravel setup
-RUN cp .env.example .env 2>/dev/null || true
-RUN php artisan config:clear
 
 EXPOSE 8080
 
