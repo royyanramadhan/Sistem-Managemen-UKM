@@ -26,8 +26,8 @@ Route::get('/migrate', function () {
 // Temporary route to run database seeders from browser
 Route::get('/seed', function () {
     try {
-        Artisan::call('db:seed', ['--force' => true]);
-        return "Database Seeded successfully! Output: <br><pre>" . Artisan::output() . "</pre><br><a href='/'>Go back to home</a>";
+        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+        return "Database Freshed and Seeded successfully! Output: <br><pre>" . Artisan::output() . "</pre><br><a href='/'>Go back to home</a>";
     } catch (\Exception $e) {
         return "Seeding failed: " . $e->getMessage();
     }
