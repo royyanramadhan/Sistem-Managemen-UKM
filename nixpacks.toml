@@ -1,5 +1,4 @@
-[phases.setup
-]
+[phases.setup]
 nixPkgs = [
     "php84",
     "php84Extensions.pdo",
@@ -17,8 +16,7 @@ nixPkgs = [
     "nodejs_20"
 ]
 
-[phases.build
-]
+[phases.build]
 cmds = [
     "composer install --optimize-autoloader --no-dev --no-interaction",
     "npm install && npm run build"
