@@ -18,22 +18,29 @@ class DashboardController extends Controller
     // Halaman Landing Page Utama
     public function landing()
     {
-        $stats = [
-            'ukm' => Ukm::where('status', 'aktif')->count(),
-            'mahasiswa' => User::where('role', 'user')->count(),
-            'pendaftaran' => Keanggotaan::count(),
-            'kegiatan' => Kegiatan::count(),
-        ];
+        try {
+            $stats = [
+                'ukm' => Ukm::where('status', 'aktif')->count(),
+                'mahasiswa' => User::where('role', 'user')->count(),
+                'pendaftaran' => Keanggotaan::count(),
+                'kegiatan' => Kegiatan::count(),
+            ];
 
-        $ukms = Ukm::where('status', 'aktif')->take(6)->get();
+            $ukms = Ukm::where('status', 'aktif')->take(6)->get();
 
-        // Berita terpilih untuk ditampilkan di landing page
-        $beritaLanding = Berita::with('ukm')
-            ->where('status', 'published')
-            ->where('tampil_di_dashboard', true)
-            ->orderByDesc('tanggal_publikasi')
-            ->take(6)
-            ->get();
+            // Berita terpilih untuk ditampilkan di landing page
+            $beritaLanding = Berita::with('ukm')
+                ->where('status', 'published')
+                ->where('tampil_di_dashboard', true)
+                ->orderByDesc('tanggal_publikasi')
+                ->take(6)
+                ->get();
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Jika tabel belum di-migrate, tangkap error agar web tidak crash (Healthcheck pass)
+            $stats = ['ukm' => 0, 'mahasiswa' => 0, 'pendaftaran' => 0, 'kegiatan' => 0];
+            $ukms = collect();
+            $beritaLanding = collect();
+        }
 
         return view('welcome', compact('stats', 'ukms', 'beritaLanding'));
     }

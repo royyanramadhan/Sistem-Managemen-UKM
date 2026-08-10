@@ -11,6 +11,17 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\KeanggotaanController;
 use App\Http\Controllers\BeritaController;
+use Illuminate\Support\Facades\Artisan;
+
+// Temporary route to run migrations from browser
+Route::get('/migrate', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return "Migration successful! Output: <br><pre>" . Artisan::output() . "</pre><br><a href='/'>Go back to home</a>";
+    } catch (\Exception $e) {
+        return "Migration failed: " . $e->getMessage();
+    }
+});
 
 // ==================== SISI PUBLIK / USER ====================
 
