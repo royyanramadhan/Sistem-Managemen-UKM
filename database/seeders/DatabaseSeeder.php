@@ -36,6 +36,9 @@ class DatabaseSeeder extends Seeder
             UkmSeeder::class,
             DivisiSeeder::class,
             DummyDataSeeder::class,
+            KegiatanSeeder::class,
+            PrestasiSeeder::class,
+            BeritaSeeder::class,
         ]);
     }
 }
