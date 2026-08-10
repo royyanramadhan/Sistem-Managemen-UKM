@@ -1,0 +1,101 @@
+@extends('layouts.app')
+
+@section('title', 'Edit Anggota')
+
+@section('content')
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Edit Anggota: {{ $user->name }}</h1>
+
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <form action="{{ route('user.update', $user) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+            @method('PUT')
+
+<!-- Nama -->
+            <div>
+                <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
+                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none @error('name') border-red-500 @enderror"
+                    placeholder="Masukkan nama lengkap">
+                @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- NIM -->
+            <div>
+                <label for="nim" class="block text-sm font-semibold text-gray-700 mb-2">NIM</label>
+                <input type="text" id="nim" name="nim" value="{{ old('nim', $user->nim) }}" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none @error('nim') border-red-500 @enderror"
+                    placeholder="Masukkan NIM">
+                @error('nim') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none @error('email') border-red-500 @enderror"
+                    placeholder="email@example.com">
+                @error('email') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Photo Upload -->
+            <div>
+                <label for="photo" class="block text-sm font-semibold text-gray-700 mb-2">Foto Profil</label>
+                @if($user->photo)
+                    <div class="mb-3">
+                        <p class="text-sm text-gray-600 mb-2">Foto saat ini:</p>
+                        <img src="{{ asset('storage/' . $user->photo) }}" alt="{{ $user->name }}" class="w-32 h-32 object-cover rounded-lg">
+                    </div>
+                @endif
+                <input type="file" id="photo" name="photo" accept="image/*" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none @error('photo') border-red-500 @enderror"
+                    onchange="previewImage(event)">
+                <p class="text-gray-500 text-sm mt-1">Ukuran maksimal: 2MB (JPEG, PNG, GIF) - Kosongkan jika tidak ingin mengganti</p>
+                @error('photo') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                <div id="preview" class="mt-4"></div>
+            </div>
+
+            <!-- Telepon -->
+            <div>
+                <label for="telepon" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label>
+                <input type="tel" id="telepon" name="telepon" value="{{ old('telepon', $user->telepon) }}" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none @error('telepon') border-red-500 @enderror"
+                    placeholder="081234567890">
+                @error('telepon') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Bio -->
+            <div>
+                <label for="bio" class="block text-sm font-semibold text-gray-700 mb-2">Bio / Deskripsi</label>
+                <textarea id="bio" name="bio" rows="4" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none @error('bio') border-red-500 @enderror"
+                    placeholder="Tuliskan bio singkat...">{{ old('bio', $user->bio) }}</textarea>
+                @error('bio') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4 pt-6 border-t">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition">
+                    💾 Update Anggota
+                </button>
+                <a href="{{ route('user.show', $user) }}" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg transition text-center">
+                    ❌ Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('preview').innerHTML = `<img src="${e.target.result}" class="w-full max-w-sm rounded-lg">`;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>
+@endsection
