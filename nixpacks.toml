@@ -16,6 +16,9 @@ nixPkgs = [
     "nodejs_20"
 ]
 
+[variables]
+APP_URL = "http://localhost"
+
 [phases.build]
 cmds = [
     "composer install --optimize-autoloader --no-dev --no-interaction",
