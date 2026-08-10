@@ -52,7 +52,17 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => (function () {
+        $url = env('APP_URL', 'http://localhost');
+        if (empty($url) || str_contains($url, '${')) {
+            return 'http://localhost';
+        }
+        $host = parse_url($url, PHP_URL_HOST);
+        if (!$host || preg_match('/[^a-zA-Z0-9\.\-:]/', $host)) {
+            return 'http://localhost';
+        }
+        return $url;
+    })(),
 
     /*
     |--------------------------------------------------------------------------
