@@ -22,4 +22,10 @@ RUN php artisan storage:link || true
 
 EXPOSE 8080
 
-CMD ["bash", "-c", "php artisan config:clear && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+CMD ["bash", "-c", "\
+  echo '>> clearing config' && php artisan config:clear && \
+  echo '>> running migrations' && php artisan migrate --force && \
+  echo '>> caching config' && php artisan config:cache && \
+  echo '>> caching routes' && php artisan route:cache && \
+  echo '>> caching views' && php artisan view:cache && \
+  echo '>> starting server' && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
