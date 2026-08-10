@@ -22,3 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*'),
         );
     })->create();
+
+if ($envKey = env('APP_KEY')) {
+    config(['app.key' => $envKey]);
+}
+
+return $app;
