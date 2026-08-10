@@ -107,7 +107,13 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
-    'key' => env('APP_KEY', 'base64:dR9fsrTF4fSPOJCHhk/9BR6fxr+e2cTIqVsVkLDI+H0='),
+    'key' => (function () {
+        $key = env('APP_KEY');
+        if (empty($key)) {
+            return 'base64:dR9fsrTF4fSPOJCHhk/9BR6fxr+e2cTIqVsVkLDI+H0=';
+        }
+        return trim($key, '"\' ');
+    })(),
 
     'previous_keys' => [
         ...array_filter(

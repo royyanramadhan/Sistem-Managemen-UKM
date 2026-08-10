@@ -20,11 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
-        );
     })->create();
 
-if ($envKey = env('APP_KEY')) {
-    config(['app.key' => $envKey]);
+$configCache = __DIR__.'/cache/config.php';
+if (file_exists($configCache)) {
+    @unlink($configCache);
 }
 
 return $app;
